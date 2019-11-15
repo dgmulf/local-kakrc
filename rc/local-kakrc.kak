@@ -4,14 +4,13 @@ declare-option bool source_local_kakrc false
 hook global KakBegin .* %{
     evaluate-commands %sh{
         if [ $kak_opt_source_local_kakrc = true ]; then
-            check="$(pwd)"
-            while [ "$check" != "/" ]; do
-                if [ -f "$check/.kakrc" ]; then
-                    printf %s\\n "set-option global project_directory '${check}'"
-                    printf %s\\n "source '${check}/.kakrc'"
+            while [ "$PWD" != "/" ]; do
+                if [ -f .kakrc ]; then
+                    printf %s\\n "set-option global project_directory '$PWD'"
+                    printf %s\\n "source '$PWD/.kakrc'"
                     break
                 fi
-                check="$(dirname "$check")"
+                cd ..
             done
         fi
     }
